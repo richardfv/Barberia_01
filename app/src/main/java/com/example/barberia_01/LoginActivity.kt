@@ -13,9 +13,9 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
 
-        val usernameEditText = findViewById<TextInputEditText>(R.id.et_username)
-        val passwordEditText = findViewById<TextInputEditText>(R.id.et_password)
-        val loginButton = findViewById<Button>(R.id.btn_login)
+        val usernameEditText = findViewById<TextInputEditText>(R.id.etUsuario)
+        val passwordEditText = findViewById<TextInputEditText>(R.id.etContrasena)
+        val loginButton = findViewById<Button>(R.id.btnIngresar)
 
 
         loginButton.setOnClickListener {

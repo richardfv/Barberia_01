@@ -20,7 +20,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutClientName"
+        android:id="@+id/tilNombreCliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -28,7 +28,7 @@
         app:boxBackgroundMode="outline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextClientName"
+            android:id="@+id/etNombreCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
@@ -36,87 +36,119 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutService"
+        android:id="@+id/tilDniCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="DNI del Cliente"
+        app:boxBackgroundMode="outline">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDniCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="8"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilTelefonoCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Teléfono del Cliente"
+        app:boxBackgroundMode="outline">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTelefonoCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="9"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilServicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Servicio"
-        app:endIconDrawable="@drawable/ic_add_task"
-        app:endIconMode="custom"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
         app:boxBackgroundMode="outline">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextService"
+        <AutoCompleteTextView
+            android:id="@+id/actvServicio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="false"
-            android:inputType="none" />
+            android:inputType="none"
+            android:hint="@null"
+            android:importantForAutofill="no"
+            android:labelFor="@+id/tilServicio" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutBarber"
+        android:id="@+id/tilBarbero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Barbero"
-        app:endIconDrawable="@drawable/ic_add_task"
-        app:endIconMode="custom"
+        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
         app:boxBackgroundMode="outline">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextBarber"
+        <AutoCompleteTextView
+            android:id="@+id/actvBarbero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none" />
+            android:inputType="none"
+            android:hint="@null"
+            android:importantForAutofill="no"
+            android:labelFor="@+id/tilBarbero" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutDate"
+        android:id="@+id/tilFechaCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Fecha de la Cita"
-        app:endIconDrawable="@drawable/ic_calendar"
-        app:endIconMode="custom"
         app:boxBackgroundMode="outline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextDate"
+            android:id="@+id/etFechaCita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:clickable="true"
-            android:inputType="none" />
+            android:inputType="none"
+            android:labelFor="@+id/tilFechaCita" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutTime"
+        android:id="@+id/tilHoraCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:hint="Hora de la Cita"
-        app:endIconDrawable="@drawable/ic_event_available"
-        app:endIconMode="custom"
         app:boxBackgroundMode="outline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTime"
+            android:id="@+id/etHoraCita"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:clickable="true"
-            android:inputType="none" />
+            android:inputType="none"
+            android:labelFor="@+id/tilHoraCita" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonConfirmAppointment"
+        android:id="@+id/btnConfirmarCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirmar Cita"

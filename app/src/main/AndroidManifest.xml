@@ -26,9 +26,23 @@
             android:exported="false" />
         <activity
             android:name=".RegisterAppointmentActivity"
+            android:label="Registrar Cita"
+            android:theme="@style/Theme.Barberia_01.NoActionBar"
             android:exported="false" />
         <activity
-            android:name=".AvailabilityActivity"
+            android:name=".VerDisponibilidadActivity"
+            android:label="Ver Disponibilidad"
+            android:theme="@style/Theme.Barberia_01.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".MisCitasActivity"
+            android:label="Mis Citas"
+            android:theme="@style/Theme.Barberia_01.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".PagosActivity"
+            android:label="Realizar Pago"
+            android:theme="@style/Theme.Barberia_01.NoActionBar"
             android:exported="false" />
     </application>
 

@@ -8,6 +8,11 @@ android {
         version = release(36)
     }
 
+    // Habilitar View Binding
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.barberia_01"
         minSdk = 24
