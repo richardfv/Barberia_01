@@ -16,7 +16,13 @@ class LoginActivity : AppCompatActivity() {
         val usernameEditText = findViewById<TextInputEditText>(R.id.etUsuario)
         val passwordEditText = findViewById<TextInputEditText>(R.id.etContrasena)
         val loginButton = findViewById<Button>(R.id.btnIngresar)
+        val tvIrRegistro = findViewById<android.widget.TextView>(R.id.tvIr)
 
+
+        tvIrRegistro.setOnClickListener {
+            val intent = Intent(this, RegistrarActivity::class.java)
+            startActivity(intent)
+        }
 
         loginButton.setOnClickListener {
             // Obtenemos el texto que el usuario escribió y lo convertimos a un String.

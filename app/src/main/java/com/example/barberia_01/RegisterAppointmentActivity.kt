@@ -1,8 +1,10 @@
 package com.example.barberia_01
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+
+
 import android.os.Bundle
+import android.content.Intent
+import android.app.Activity
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -17,12 +19,15 @@ import java.util.Locale
 class RegisterAppointmentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterAppointmentBinding
-    //con esto inicializamos sin constructor segun el profe
+
+    // Cuando VerDisponibilidadActivity nos devuelva
+    // un resultado, usaremos este código para saber que es la respuesta a nuestra petición.
+    private val CODIGO_SOLICITUD_FECHA_HORA = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterAppointmentBinding.inflate(layoutInflater)
-        //es para usar controles sin tener que declararlos
+
         setContentView(binding.root)
 
         val services = arrayOf("Corte de Pelo", "Arreglo de Barba", "Afeitado Clásico", "Corte y Barba", "Lavado y Peinado")
@@ -35,45 +40,15 @@ class RegisterAppointmentActivity : AppCompatActivity() {
         (binding.tilServicio.editText as? AutoCompleteTextView)?.setAdapter(serviceAdapter)
         (binding.tilBarbero.editText as? AutoCompleteTextView)?.setAdapter(barberAdapter)
 
+        //"Elegir"
+        binding.btnBuscarDisponibilidad.setOnClickListener {
 
-        val calendar = Calendar.getInstance()
+            val intent = Intent(this, VerDisponibilidadActivity::class.java)
 
-        binding.etFechaCita.setOnClickListener {
-            // Se crea un DatePickerDialog con la fecha actual
-            DatePickerDialog(
-                this,
-                { _, year, monthOfYear, dayOfMonth ->
-                    // Cuando se selecciona una fecha, se actualiza el objeto Calendar.
-                    calendar.set(year, monthOfYear, dayOfMonth)
-
-                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                    binding.etFechaCita.setText(dateFormat.format(calendar.time))
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show() // Muestra el DatePickerDialog.
+            // En lugar de startActivity, usamos startActivityForResult. para esperar un resultado de vuelta
+            startActivityForResult(intent, CODIGO_SOLICITUD_FECHA_HORA)
         }
 
-        binding.etHoraCita.setOnClickListener {
-            // Se crea un TimePickerDialog con la hora actual
-            TimePickerDialog(
-                this,
-                { _, hourOfDay, minute ->
-
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                    calendar.set(Calendar.MINUTE, minute)
-
-                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    binding.etHoraCita.setText(timeFormat.format(calendar.time))
-                },
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                true // true para formato de 24 horas, false para AM/PM.
-            ).show() // Muestra el TimePickerDialog.
-        }
-
-        //botón |Confirmar cita
 
         binding.btnConfirmarCita.setOnClickListener {
 
@@ -82,8 +57,8 @@ class RegisterAppointmentActivity : AppCompatActivity() {
             val clientPhone = binding.etTelefonoCliente.text.toString()
             val service = (binding.tilServicio.editText as? AutoCompleteTextView)?.text.toString()
             val barber = (binding.tilBarbero.editText as? AutoCompleteTextView)?.text.toString()
-            val date = binding.etFechaCita.text.toString()
-            val time = binding.etHoraCita.text.toString()
+            val fechaHoraSeleccionada = binding.tvFechaHoraSeleccionada.text.toString()
+
 
             val message = "Cita Confirmada:\n" +
                     "Cliente: $clientName\n" +
@@ -91,10 +66,38 @@ class RegisterAppointmentActivity : AppCompatActivity() {
                     "Teléfono: $clientPhone\n" +
                     "Servicio: $service\n" +
                     "Barbero: $barber\n" +
-                    "Fecha: $date\n" +
-                    "Hora: $time"
+                    "Fecha y Hora: $fechaHoraSeleccionada"
 
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // función especial de Android que se llama automáticamente
+    // cuando una actividad que lanzamos con startActivityForResult termina y nos devuelve un resultado.
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Primero, comprobamos que el resultado que estamos recibiendo es para la petición que hicimos.
+        // Comparamos el requestCode con el código que enviamos (CODIGO_SOLICITUD_FECHA_HORA).
+        if (requestCode == CODIGO_SOLICITUD_FECHA_HORA) {
+
+            // Activity.RESULT_OK es una constante de Android que indica que todo fue bien.
+            if (resultCode == Activity.RESULT_OK) {
+
+                // Si todo fue bien, extraemos los datos que la otra actividad nos envió en el Intent.
+                // Usamos la misma clave ("FECHA_SELECCIONADA", "HORA_SELECCIONADA") que usamos para enviarlos.
+                val fechaSeleccionada = data?.getStringExtra("FECHA_SELECCIONADA")
+                val horaSeleccionada = data?.getStringExtra("HORA_SELECCIONADA")
+
+                // datos no son nulos o vacíos por seguridad
+                if (!fechaSeleccionada.isNullOrEmpty() && !horaSeleccionada.isNullOrEmpty()) {
+                    // Si tenemos los datos, actualizamos nuestro TextView para que el usuario los vea.
+                    binding.tvFechaHoraSeleccionada.text = "$fechaSeleccionada, $horaSeleccionada"
+                } else {
+                    // Si algo falló al recibir los datos, lo indicamos.
+                    binding.tvFechaHoraSeleccionada.text = "Error al seleccionar"
+                }
+            }
         }
     }
 }

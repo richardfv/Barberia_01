@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Barberia_01">
         <activity
+            android:name=".RegistrarActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Barberia_01.NoActionBar" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Barberia_01.NoActionBar">
@@ -26,24 +30,24 @@
             android:exported="false" />
         <activity
             android:name=".RegisterAppointmentActivity"
+            android:exported="false"
             android:label="Registrar Cita"
-            android:theme="@style/Theme.Barberia_01.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/Theme.Barberia_01.NoActionBar" />
         <activity
             android:name=".VerDisponibilidadActivity"
+            android:exported="false"
             android:label="Ver Disponibilidad"
-            android:theme="@style/Theme.Barberia_01.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/Theme.Barberia_01.NoActionBar" />
         <activity
             android:name=".MisCitasActivity"
+            android:exported="false"
             android:label="Mis Citas"
-            android:theme="@style/Theme.Barberia_01.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/Theme.Barberia_01.NoActionBar" />
         <activity
             android:name=".PagosActivity"
+            android:exported="false"
             android:label="Realizar Pago"
-            android:theme="@style/Theme.Barberia_01.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/Theme.Barberia_01.NoActionBar" />
     </application>
 
 </manifest>

@@ -109,42 +109,37 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilFechaCita"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Fecha de la Cita"
-        app:boxBackgroundMode="outline">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha y Hora de la Cita"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etFechaCita"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none"
-            android:labelFor="@+id/tilFechaCita" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
 
+            <TextView
+                android:id="@+id/tv_fecha_hora_seleccionada"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sin seleccionar"
+                android:textSize="18sp"
+                android:padding="8dp"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilHoraCita"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:hint="Hora de la Cita"
-        app:boxBackgroundMode="outline">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etHoraCita"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="none"
-            android:labelFor="@+id/tilHoraCita" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_buscar_disponibilidad"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elegir"
+                app:icon="@drawable/ic_calendar" />
+        </LinearLayout>
 
 
     <com.google.android.material.button.MaterialButton
