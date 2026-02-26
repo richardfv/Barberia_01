@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "281840606306",
+    "project_id": "barberia-grupo1",
+    "storage_bucket": "barberia-grupo1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281840606306:android:8a59a097f531dfef5f053b",
+        "android_client_info": {
+          "package_name": "com.example.barberia_01"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKSf4-JJDjaXlOBg_XEY72Tk2WNUU6HWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

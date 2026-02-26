@@ -9,16 +9,17 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tvBienvenida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="48dp"
-        android:text="Bienvenido, Richi"
+        android:text="Bienvenido"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="?attr/colorPrimary" />
 
-
+    <!-- SECCIÓN DE CLIENTE -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvRegistrarCita"
         android:layout_width="match_parent"
@@ -26,21 +27,18 @@
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
-
+        <!-- ... contenido del cliente ... -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_add_task"
-                app:tint="?attr/colorPrimary" 
-                android:contentDescription="Registrar Cita"/>
-
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -51,40 +49,6 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvVerDisponibilidad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_event_available"
-                app:tint="?attr/colorPrimary"
-                android:contentDescription="Icono para ver la disponibilidad de barberos"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:text="Ver Disponibilidad de Barberos"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvMisCitas"
         android:layout_width="match_parent"
@@ -92,21 +56,17 @@
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_calendar"
-                app:tint="?attr/colorPrimary" 
-                android:contentDescription="Mis Citas"/>
-
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -117,34 +77,118 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvRealizarPago"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_payment"
-                app:tint="?attr/colorPrimary" 
-                android:contentDescription="Icono para realizar pagos"/>
-
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Pagos"
+                android:text="Realizar Pago"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- SECCIÓN DE BARBERO (Oculta por defecto con 'gone') -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvConfigurarDisponibilidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_event_available"
+                app:tint="?attr/colorPrimary" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Configurar mi Disponibilidad"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvGestionarCitasBarbero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_calendar"
+                app:tint="?attr/colorPrimary" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Gestionar Citas Pendientes"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Esta opción la pueden ver ambos para consultar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvVerDisponibilidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_event_available"
+                app:tint="?attr/colorPrimary" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Ver Disponibilidad General"
                 android:textSize="18sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -1,46 +1,40 @@
 package com.example.barberia_01
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
+import androidx.appcompat.app.AppCompatActivity
+import com.example.barberia_01.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val usernameEditText = findViewById<TextInputEditText>(R.id.etUsuario)
-        val passwordEditText = findViewById<TextInputEditText>(R.id.etContrasena)
-        val loginButton = findViewById<Button>(R.id.btnIngresar)
-        val tvIrRegistro = findViewById<android.widget.TextView>(R.id.tvIr)
-
-
-        tvIrRegistro.setOnClickListener {
+        binding.tvIr.setOnClickListener {
             val intent = Intent(this, RegistrarActivity::class.java)
             startActivity(intent)
         }
 
-        loginButton.setOnClickListener {
-            // Obtenemos el texto que el usuario escribió y lo convertimos a un String.
-            val username = usernameEditText.text.toString()
-            val password = passwordEditText.text.toString()
+        binding.btnIngresar.setOnClickListener {
+            // Obtenemos el texto de los campos usando el binding
+            val username = binding.etUsuario.text.toString().trim()
+            val password = binding.etContrasena.text.toString().trim()
 
-
+            // Validación temporal (estática)
             if (username == "admin" && password == "1234") {
-
+                // Si es correcto, vamos al MainActivity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-
-
-                finish()
+                finish() // Cerramos el Login para que no se pueda volver atrás con el botón físico
             } else {
-
-                Toast.makeText(this, "Usuario o contraseña incorrectos",
-                    Toast.LENGTH_SHORT).show()
+                // Si es incorrecto, mostramos un mensaje
+                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }
         }
     }
