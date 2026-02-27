@@ -99,19 +99,41 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         binding.cvVerDisponibilidad.setOnClickListener {
             val intent = Intent(this, VerDisponibilidadActivity::class.java)
+            intent.putExtra("ROL_USUARIO", "Cliente")
+            intent.putExtra("MODO", "CONSULTA")
             startActivity(intent)
         }
 
+        // Acción: Mis Citas (Para el Cliente)
         binding.cvMisCitas.setOnClickListener {
             val intent = Intent(this, MisCitasActivity::class.java)
+            intent.putExtra("ROL_USUARIO", "Cliente")
+            startActivity(intent)
+        }
+
+
+        binding.cvGestionarCitasBarbero.setOnClickListener {
+            val intent = Intent(this, MisCitasActivity::class.java)
+            intent.putExtra("ROL_USUARIO", "Barbero")
             startActivity(intent)
         }
 
         binding.cvRealizarPago.setOnClickListener {
             val intent = Intent(this, PagosActivity::class.java)
             startActivity(intent)
+        }
+
+
+        binding.btnCerrarSesion.setOnClickListener {
+            auth.signOut()
+            
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
