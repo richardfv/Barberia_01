@@ -2,6 +2,7 @@ package com.example.barberia_01
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,7 @@ class RegistrarActivity : AppCompatActivity() {
 
         binding = ActivityRegistrarBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        
         auth = Firebase.auth 
         db = Firebase.firestore 
 
@@ -67,6 +68,10 @@ class RegistrarActivity : AppCompatActivity() {
             return
         }
 
+        // --- registro cargando ---
+        binding.pbRegistro.visibility = View.VISIBLE
+        binding.btnRegistrar.isEnabled = false
+
         // Crear usuario en Auth
         auth.createUserWithEmailAndPassword(correo, contra)
             .addOnCompleteListener(this) { task ->
@@ -74,13 +79,20 @@ class RegistrarActivity : AppCompatActivity() {
                     val userId = auth.currentUser?.uid
                     guardarPerfilUsuario(userId, nombre, correo, rol)
                 } else {
+                    // fin de cargando (fallo en el registro)
+                    binding.pbRegistro.visibility = View.GONE
+                    binding.btnRegistrar.isEnabled = true
                     Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
     }
 
     private fun guardarPerfilUsuario(id: String?, nombre: String, correo: String, rol: String) {
-        if (id == null) return
+        if (id == null) {
+            binding.pbRegistro.visibility = View.GONE
+            binding.btnRegistrar.isEnabled = true
+            return
+        }
 
         val userProfile = hashMapOf(
             "nombre" to nombre,
@@ -93,12 +105,15 @@ class RegistrarActivity : AppCompatActivity() {
         db.collection("Usuarios").document(id)
             .set(userProfile)
             .addOnSuccessListener {
-                Toast.makeText(this, "¡Registro Exitoso! Bienvenido $nombre", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "¡Registro Exitoso!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
             .addOnFailureListener { e ->
+                // --- FIN DE CARGA (SI FALLA EL GUARDADO DEL PERFIL) ---
+                binding.pbRegistro.visibility = View.GONE
+                binding.btnRegistrar.isEnabled = true
                 Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }

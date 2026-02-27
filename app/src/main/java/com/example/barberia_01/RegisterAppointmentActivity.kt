@@ -1,102 +1,133 @@
 package com.example.barberia_01
 
-
-
-import android.os.Bundle
-import android.content.Intent
 import android.app.Activity
-import android.view.View
+import android.content.Intent
+import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.barberia_01.databinding.ActivityRegisterAppointmentBinding
-import com.google.android.material.textfield.TextInputEditText
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
+
 class RegisterAppointmentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterAppointmentBinding
+    private val auth = Firebase.auth
+    private val db = Firebase.firestore
 
-    // Cuando VerDisponibilidadActivity nos devuelva
-    // un resultado, usaremos este código para saber que es la respuesta a nuestra petición.
+    // Listas para manejar barberos reales
+    private val listaNombresBarberos = mutableListOf<String>()
+    private val listaIdsBarberos = mutableListOf<String>()
+    private var barberoIdSeleccionado: String = ""
+
     private val CODIGO_SOLICITUD_FECHA_HORA = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterAppointmentBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
+
         val services = arrayOf("Corte de Pelo", "Arreglo de Barba", "Afeitado Clásico", "Corte y Barba", "Lavado y Peinado")
-        val barbers = arrayOf("Juanito Perez", "Mari Mar", "Carlos Alcantara", "Ana Ramirez")
-
         val serviceAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, services)
-        val barberAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, barbers)
-
-
         (binding.tilServicio.editText as? AutoCompleteTextView)?.setAdapter(serviceAdapter)
-        (binding.tilBarbero.editText as? AutoCompleteTextView)?.setAdapter(barberAdapter)
 
-        //"Elegir"
+
+        cargarBarberosReales()
+
         binding.btnBuscarDisponibilidad.setOnClickListener {
+            val nombreBarbero = (binding.tilBarbero.editText as? AutoCompleteTextView)?.text.toString()
+            
+
+            val index = listaNombresBarberos.indexOf(nombreBarbero)
+            
+            if (index == -1) {
+                Toast.makeText(this, "Por favor, selecciona un barbero de la lista", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            barberoIdSeleccionado = listaIdsBarberos[index]
 
             val intent = Intent(this, VerDisponibilidadActivity::class.java)
-
-            // En lugar de startActivity, usamos startActivityForResult. para esperar un resultado de vuelta
+            intent.putExtra("ROL_USUARIO", "Cliente")
+            intent.putExtra("BARBERO_ID", barberoIdSeleccionado) // Enviamos el ID REAL
+            intent.putExtra("BARBERO_NOMBRE", nombreBarbero)
             startActivityForResult(intent, CODIGO_SOLICITUD_FECHA_HORA)
         }
 
-
         binding.btnConfirmarCita.setOnClickListener {
-
-            val clientName = binding.etNombreCliente.text.toString()
-            val clientDNI = binding.etDniCliente.text.toString()
-            val clientPhone = binding.etTelefonoCliente.text.toString()
-            val service = (binding.tilServicio.editText as? AutoCompleteTextView)?.text.toString()
-            val barber = (binding.tilBarbero.editText as? AutoCompleteTextView)?.text.toString()
-            val fechaHoraSeleccionada = binding.tvFechaHoraSeleccionada.text.toString()
-
-
-            val message = "Cita Confirmada:\n" +
-                    "Cliente: $clientName\n" +
-                    "DNI: $clientDNI\n" +
-                    "Teléfono: $clientPhone\n" +
-                    "Servicio: $service\n" +
-                    "Barbero: $barber\n" +
-                    "Fecha y Hora: $fechaHoraSeleccionada"
-
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            guardarCitaEnFirestore()
         }
     }
 
-    // función especial de Android que se llama automáticamente
-    // cuando una actividad que lanzamos con startActivityForResult termina y nos devuelve un resultado.
+    private fun cargarBarberosReales() {
+        db.collection("Usuarios")
+            .whereEqualTo("rol", "Barbero")
+            .get()
+            .addOnSuccessListener { documents ->
+                listaNombresBarberos.clear()
+                listaIdsBarberos.clear()
+                
+                for (doc in documents) {
+                    val nombre = doc.getString("nombre") ?: "Barbero"
+                    val id = doc.id // El UID del documento
+                    
+                    listaNombresBarberos.add(nombre)
+                    listaIdsBarberos.add(id)
+                }
+
+                // Actualizamos
+                val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaNombresBarberos)
+                (binding.tilBarbero.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error al cargar barberos: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun guardarCitaEnFirestore() {
+        val nombre = binding.etNombreCliente.text.toString().trim()
+        val dni = binding.etDniCliente.text.toString().trim()
+        val telefono = binding.etTelefonoCliente.text.toString().trim()
+        val servicio = (binding.tilServicio.editText as? AutoCompleteTextView)?.text.toString()
+        val barbero = (binding.tilBarbero.editText as? AutoCompleteTextView)?.text.toString()
+        val fechaHora = binding.tvFechaHoraSeleccionada.text.toString()
+
+        if (nombre.isEmpty() || dni.isEmpty() || telefono.isEmpty() || 
+            servicio.isEmpty() || barbero.isEmpty() || fechaHora == "Sin seleccionar") {
+            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val cita = hashMapOf(
+            "clienteId" to (auth.currentUser?.uid ?: ""),
+            "nombreCliente" to nombre,
+            "dniCliente" to dni,
+            "telefonoCliente" to telefono,
+            "servicio" to servicio,
+            "barbero" to barbero,
+            "barberoId" to barberoIdSeleccionado,
+            "fechaHora" to fechaHora,
+            "estado" to "Pendiente"
+        )
+
+        db.collection("Citas").add(cita)
+            .addOnSuccessListener {
+                Toast.makeText(this, "¡Cita agendada!", Toast.LENGTH_LONG).show()
+                finish()
+            }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        // Primero, comprobamos que el resultado que estamos recibiendo es para la petición que hicimos.
-        // Comparamos el requestCode con el código que enviamos (CODIGO_SOLICITUD_FECHA_HORA).
-        if (requestCode == CODIGO_SOLICITUD_FECHA_HORA) {
-
-            // Activity.RESULT_OK es una constante de Android que indica que todo fue bien.
-            if (resultCode == Activity.RESULT_OK) {
-
-                // Si todo fue bien, extraemos los datos que la otra actividad nos envió en el Intent.
-                // Usamos la misma clave ("FECHA_SELECCIONADA", "HORA_SELECCIONADA") que usamos para enviarlos.
-                val fechaSeleccionada = data?.getStringExtra("FECHA_SELECCIONADA")
-                val horaSeleccionada = data?.getStringExtra("HORA_SELECCIONADA")
-
-                // datos no son nulos o vacíos por seguridad
-                if (!fechaSeleccionada.isNullOrEmpty() && !horaSeleccionada.isNullOrEmpty()) {
-                    // Si tenemos los datos, actualizamos nuestro TextView para que el usuario los vea.
-                    binding.tvFechaHoraSeleccionada.text = "$fechaSeleccionada, $horaSeleccionada"
-                } else {
-                    // Si algo falló al recibir los datos, lo indicamos.
-                    binding.tvFechaHoraSeleccionada.text = "Error al seleccionar"
-                }
+        if (requestCode == CODIGO_SOLICITUD_FECHA_HORA && resultCode == Activity.RESULT_OK) {
+            val fecha = data?.getStringExtra("FECHA_SELECCIONADA")
+            val hora = data?.getStringExtra("HORA_SELECCIONADA")
+            if (!fecha.isNullOrEmpty() && !hora.isNullOrEmpty()) {
+                binding.tvFechaHoraSeleccionada.text = "$fecha, $hora"
             }
         }
     }

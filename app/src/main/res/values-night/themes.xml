@@ -1,7 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Barberia_01" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Configuramos colores básicos para el modo nocturno -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 </resources>
