@@ -8,4 +8,6 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="gray">#808080</color>
+    <color name="estado_pendiente">#FF9800</color>
+    <color name="estado_pagada">#4CAF50</color>
 </resources>

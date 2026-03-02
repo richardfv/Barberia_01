@@ -18,7 +18,7 @@ class RegisterAppointmentActivity : AppCompatActivity() {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
 
-    // Listas para manejar barberos reales
+    // Listas para manejar barberos
     private val listaNombresBarberos = mutableListOf<String>()
     private val listaIdsBarberos = mutableListOf<String>()
     private var barberoIdSeleccionado: String = ""
@@ -39,9 +39,10 @@ class RegisterAppointmentActivity : AppCompatActivity() {
         cargarBarberosReales()
 
         binding.btnBuscarDisponibilidad.setOnClickListener {
+            //se obtiene el texto del autocpl
             val nombreBarbero = (binding.tilBarbero.editText as? AutoCompleteTextView)?.text.toString()
             
-
+            //1ra ocurrencia
             val index = listaNombresBarberos.indexOf(nombreBarbero)
             
             if (index == -1) {
@@ -49,11 +50,12 @@ class RegisterAppointmentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            //obtenemos el id en frre
             barberoIdSeleccionado = listaIdsBarberos[index]
 
             val intent = Intent(this, VerDisponibilidadActivity::class.java)
             intent.putExtra("ROL_USUARIO", "Cliente")
-            intent.putExtra("BARBERO_ID", barberoIdSeleccionado) // Enviamos el ID REAL
+            intent.putExtra("BARBERO_ID", barberoIdSeleccionado)
             intent.putExtra("BARBERO_NOMBRE", nombreBarbero)
             startActivityForResult(intent, CODIGO_SOLICITUD_FECHA_HORA)
         }
@@ -73,13 +75,13 @@ class RegisterAppointmentActivity : AppCompatActivity() {
                 
                 for (doc in documents) {
                     val nombre = doc.getString("nombre") ?: "Barbero"
-                    val id = doc.id // El UID del documento
+                    val id = doc.id
                     
                     listaNombresBarberos.add(nombre)
                     listaIdsBarberos.add(id)
                 }
 
-                // Actualizamos
+                // nuevo adapte Actualizamos
                 val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaNombresBarberos)
                 (binding.tilBarbero.editText as? AutoCompleteTextView)?.setAdapter(adapter)
             }
@@ -89,6 +91,7 @@ class RegisterAppointmentActivity : AppCompatActivity() {
     }
 
     private fun guardarCitaEnFirestore() {
+        //recopilamos la info
         val nombre = binding.etNombreCliente.text.toString().trim()
         val dni = binding.etDniCliente.text.toString().trim()
         val telefono = binding.etTelefonoCliente.text.toString().trim()
@@ -102,6 +105,7 @@ class RegisterAppointmentActivity : AppCompatActivity() {
             return
         }
 
+        //cosntr objda fiste
         val cita = hashMapOf(
             "clienteId" to (auth.currentUser?.uid ?: ""),
             "nombreCliente" to nombre,
@@ -119,10 +123,14 @@ class RegisterAppointmentActivity : AppCompatActivity() {
                 Toast.makeText(this, "¡Cita agendada!", Toast.LENGTH_LONG).show()
                 finish()
             }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error al guardar cita: ${e.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        //resultado y operacion exitosa dauth
         if (requestCode == CODIGO_SOLICITUD_FECHA_HORA && resultCode == Activity.RESULT_OK) {
             val fecha = data?.getStringExtra("FECHA_SELECCIONADA")
             val hora = data?.getStringExtra("HORA_SELECCIONADA")

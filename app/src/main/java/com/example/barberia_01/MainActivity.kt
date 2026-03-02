@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                     val nombre = document.getString("nombre") ?: "Usuario"
                     val rol = document.getString("rol") ?: "Cliente"
 
-                    //una vez que ya lo tenemos llamamos a esta f
+                    //obtenidos
                     configurarMenuSegunRol(rol, nombre)
                 }
             }
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Acción: Mis Citas (Para el Cliente)
+
         binding.cvMisCitas.setOnClickListener {
             val intent = Intent(this, MisCitasActivity::class.java)
             intent.putExtra("ROL_USUARIO", "Cliente")

@@ -47,6 +47,7 @@ class RegistrarActivity : AppCompatActivity() {
     }
 
     private fun registrarUsuarioFirebase() {
+        //recopilamos
         val nombre = binding.etUsuario.text.toString().trim()
         val correo = binding.etCorreo.text.toString().trim()
         val contra = binding.etContrasena.text.toString().trim()
@@ -68,7 +69,7 @@ class RegistrarActivity : AppCompatActivity() {
             return
         }
 
-        // --- registro cargando ---
+        //  cargando
         binding.pbRegistro.visibility = View.VISIBLE
         binding.btnRegistrar.isEnabled = false
 
@@ -79,7 +80,7 @@ class RegistrarActivity : AppCompatActivity() {
                     val userId = auth.currentUser?.uid
                     guardarPerfilUsuario(userId, nombre, correo, rol)
                 } else {
-                    // fin de cargando (fallo en el registro)
+                    // fin cargando (fallo en el registro)
                     binding.pbRegistro.visibility = View.GONE
                     binding.btnRegistrar.isEnabled = true
                     Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
@@ -93,7 +94,7 @@ class RegistrarActivity : AppCompatActivity() {
             binding.btnRegistrar.isEnabled = true
             return
         }
-
+        //cosntr objda fiste
         val userProfile = hashMapOf(
             "nombre" to nombre,
             "correo" to correo,
@@ -101,7 +102,7 @@ class RegistrarActivity : AppCompatActivity() {
             "uid" to id
         )
 
-        // Guardar en Firestore
+        // Guardar
         db.collection("Usuarios").document(id)
             .set(userProfile)
             .addOnSuccessListener {
@@ -111,7 +112,7 @@ class RegistrarActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener { e ->
-                // --- FIN DE CARGA (SI FALLA EL GUARDADO DEL PERFIL) ---
+                // cargando end
                 binding.pbRegistro.visibility = View.GONE
                 binding.btnRegistrar.isEnabled = true
                 Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()

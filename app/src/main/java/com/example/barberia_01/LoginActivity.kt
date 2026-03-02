@@ -51,13 +51,13 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(correo, contra)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Si el login es correcto, vamos al MainActivity
+
                     Toast.makeText(this, "¡Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    // --- fin de cargando ---
+                    // --- fin cargn ---
                     binding.pbLogin.visibility = View.GONE
                     binding.btnIngresar.isEnabled = true
                     
